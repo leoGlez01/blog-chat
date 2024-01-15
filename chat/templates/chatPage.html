@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <title>Home</title>
+</head>
+<body>
+
+    <div class="box">
+        <nav class="topbar">
+            <h1>Let's Chat</h1>
+            <a href = "{% url 'logout-user' %}">Logout</a>
+        </nav>
+
+        <div class="caja" id="caja">
+
+        </div>
+
+        <div class="enviar">
+            <input type="text" id="input-enviar" />
+            <button type="submit" id="btn-enviar">Enviar</button>
+        </div>
+    </div>
+    
+<script>
+    const mySocket = new WebSocket("ws://" + window.location.host + "/");
+mySocket.onopen = function (e) {
+    console.log("La conexión se estableció correctamente !");
+    
+};
+mySocket.onclose = function (e) {
+    console.log("¡Algo inesperado sucedió !");
+};
+
+document.querySelector("#input-enviar").focus();
+document.querySelector("#input-enviar").onkeyup = function (e) {
+    if (e.keyCode == 13) {
+        document.querySelector("#btn-enviar").click();
+    }
+};
+
+document.querySelector("#btn-enviar").onclick = function (e) {
+    var mensaje = document.querySelector("#input-enviar").value;
+    mySocket.send(JSON.stringify({ message: mensaje, username : "{{request.user.username}}" }));
+};
+
+mySocket.onmessage = function (e) {
+const data = JSON.parse(e.data);
+var div = document.createElement("div");
+
+div.innerHTML = data.username + " : " + data.message;
+document.querySelector("#input-enviar").value = "";
+document.querySelector("#caja").appendChild(div);
+
+let contenedor = document.getElementById('caja');
+contenedor.scrollTop = contenedor.scrollHeight;
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <title>Login</title>
+</head>
+<body>
+    <div style="display: flex;
+    flex-direction: column;
+    align-items: center;" class="box">
+    <center><h1 style="margin-top: 40%;">Chat App</h1></center>
+    <center><form style="height: 90%;" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form></center>
+  </div>
+</body>
+</html>
