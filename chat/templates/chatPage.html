@@ -12,7 +12,11 @@
     <div class="box">
         <nav class="topbar">
             <h1>Let's Chat</h1>
-            <a href = "{% url 'logout-user' %}">Logout</a>
+            
+            {% if request.user.is_autenticated %}
+            <a href = "{% url 'logout-user' %}">Logout</a>  
+            {% endif %}
+                
         </nav>
 
         <div class="caja" id="caja">
@@ -50,6 +54,7 @@ document.querySelector("#btn-enviar").onclick = function (e) {
 mySocket.onmessage = function (e) {
 const data = JSON.parse(e.data);
 var div = document.createElement("div");
+div.style.wordWrap = "anywhere";
 
 div.innerHTML = data.username + " : " + data.message;
 document.querySelector("#input-enviar").value = "";

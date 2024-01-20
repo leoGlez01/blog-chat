@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import FormLogin
 from django.contrib.auth import authenticate, login
 
@@ -11,10 +11,14 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                context ={}
-                return render(request, 'chatPage.html', context)
+                return redirect('chat-page')
 
 
     else:
         form = FormLogin()
     return render(request, 'loginPage.html', {'form': form})
+
+
+def home(request):
+    context={}
+    return render(request, 'chatPage.html', context=context)
